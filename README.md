@@ -1,3 +1,3 @@
-# E-commerce
+# Recipe App
 
-### Full stack project
+### Back-End project
