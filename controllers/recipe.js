@@ -107,11 +107,36 @@ const rateRecipe = async (req, res) => {
   }
 };
 
+const commentController = async (req, res) => {
+  const { comment } = req.body;
+  try {
+    const recipe = await recipeModel.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({
+        message: 'Recipe not found'
+      });
+    };
+    recipe.comments.push({
+      user: req.user.id,
+      comment: comment
+    });
+    await recipe.save();
+    
+    return res.status(200).json(recipe);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server error',
+      error: error.message
+    });
+  }
+};
+
 
 module.exports = {
   createRecipe,
   searchController,
   getRecipe,
   deleteRecipeById,
-  rateRecipe
+  rateRecipe,
+  commentController
 };

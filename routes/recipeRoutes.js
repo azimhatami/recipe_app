@@ -5,7 +5,9 @@ const {
   searchController, 
   getRecipe, 
   deleteRecipeById, 
-  rateRecipe } = require('../controllers/recipe');
+  rateRecipe, 
+  commentController 
+} = require('../controllers/recipe');
 const authMiddleware = require('../middleware/authMiddleware');
 
 
@@ -14,6 +16,7 @@ router.get('/search', authMiddleware, searchController);
 router.get('/:id', authMiddleware, getRecipe);
 router.delete('/:id', authMiddleware, deleteRecipeById);
 router.post('/:id/rate', authMiddleware, rateRecipe);
+router.post('/:id/comments', authMiddleware, commentController);
 
 
 module.exports = router;
