@@ -29,8 +29,31 @@ const getUserProfile = async (req, res) => {
   }
 };
 
+const updateUserProfile = async (req, res) => {
+  const { username, email } = req.body;
+  try {
+    const user = await userModel.findByIdAndUpdate(
+      req.user.id, 
+      { username, email }, 
+      { new: true }
+    ).select('-__v');
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found'
+      });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+};
+
 
 module.exports = {
   getAllUsers,
-  getUserProfile
+  getUserProfile,
+  updateUserProfile
 };
