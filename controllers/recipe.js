@@ -61,9 +61,57 @@ const getRecipe = async (req, res) => {
   }
 };
 
+const deleteRecipeById = async (req, res) => {
+  const {id} = req.params;
+  try {
+    const deleteRecipe = await recipeModel.findByIdAndDelete(id);
+    if (!deleteRecipe) {
+      return res.status(404).json({
+        message: 'Recipe not found'
+      });
+    }
+
+    return res.status(200).json({
+      message: 'Recipe deleted successfully'
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server error', 
+      error: error.message
+    });
+  }
+};
+
+const rateRecipe = async (req, res) => {
+  const {rating} = req.body;
+  try {
+    const recipe = await recipeModel.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({
+        message: 'Recipe not found'
+      });
+    }
+
+    recipe.ratings.push({
+      user: req.user.id,
+      rating: rating
+    });
+    await recipe.save();
+
+    return res.status(200).json(recipe);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server error',
+      error: error.message
+    });
+  }
+};
+
 
 module.exports = {
   createRecipe,
   searchController,
-  getRecipe
+  getRecipe,
+  deleteRecipeById,
+  rateRecipe
 };
