@@ -44,8 +44,26 @@ const searchController = async (req, res) => {
   }
 };
 
+const getRecipe = async (req, res) => {
+  try {
+    const recipe = await recipeModel.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({
+        message: 'Recipe not found'
+      });
+    }
+
+    return res.status(200).json(recipe);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server failed on recipe search...'
+    });
+  }
+};
+
 
 module.exports = {
   createRecipe,
-  searchController
+  searchController,
+  getRecipe
 };
