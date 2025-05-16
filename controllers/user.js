@@ -16,7 +16,21 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getUserProfile = async (req, res) => {
+  const id = req.user.id;
+  try {
+    const user = await userModel.findById(id).select('-password -__v');
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(500).json({
+      message: 'Server Error',
+      error: error.message
+    });
+  }
+};
+
 
 module.exports = {
-  getAllUsers
+  getAllUsers,
+  getUserProfile
 };
